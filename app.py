@@ -121,6 +121,11 @@ def index():
     return render_template("index.html")
 
 
+@app.get("/health")
+def health():
+    return {"ok": True, "service": "smart-attendance"}
+
+
 @app.get("/admin")
 def admin():
     conn = get_db()
