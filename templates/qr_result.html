@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card center">
+  <h2>{{ '✅ QR Check-in Success' if ok else '❌ QR Check-in Failed' }}</h2>
+  <p class="{{ 'ok' if ok else 'err' }}">{{ message }}</p>
+  <a class="btn" href="{{ url_for('student_page') }}">Back to Student Page</a>
+</section>
+{% endblock %}
