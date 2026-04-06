@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>Student Attendance</h2>
+  <p>Try face recognition first. If it fails, use your QR fallback.</p>
+
+  <label>Select Student
+    <select id="studentId">
+      <option value="">-- Select --</option>
+      {% for s in students %}
+      <option value="{{ s.id }}">{{ s.name }} ({{ s.id }})</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <video id="studentVideo" autoplay playsinline class="video"></video>
+  <canvas id="studentCanvas" class="hidden"></canvas>
+  <input type="hidden" id="studentFaceData" />
+
+  <div class="actions">
+    <button class="btn" onclick="markFaceAttendance()">Mark via Face</button>
+    <button class="btn secondary" onclick="showQrHelp()">QR Fallback Help</button>
+  </div>
+
+  <p id="studentMsg"></p>
+  <div id="qrHelp" class="hidden tip">
+    Ask admin for your QR. Open/scan it to visit your unique QR check-in link.
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='webcam.js') }}"></script>
+<script>
+  startCamera('studentVideo');
+
+  async function markFaceAttendance() {
+    const sid = document.getElementById('studentId').value;
+    const msg = document.getElementById('studentMsg');
+    if (!sid) {
+      msg.textContent = 'Please select your student ID first.';
+      return;
+    }
+
+    const faceData = captureFace('studentVideo', 'studentCanvas', 'studentFaceData');
+    const formData = new URLSearchParams();
+    formData.append('student_id', sid);
+    formData.append('face_data', faceData);
+
+    const res = await fetch("{{ url_for('mark_face') }}", {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: formData.toString()
+    });
+
+    const data = await res.json();
+    msg.textContent = data.message;
+    msg.className = data.ok ? 'ok' : 'err';
+  }
+
+  function showQrHelp() {
+    document.getElementById('qrHelp').classList.remove('hidden');
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card center">
+  <h2>Welcome 👋</h2>
+  <p>Use the admin page to register students and monitor attendance. Students can mark attendance via face recognition, with QR fallback if face match fails.</p>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('admin') }}">Go to Admin</a>
+    <a class="btn secondary" href="{{ url_for('student_page') }}">Go to Student</a>
+  </div>
+</section>
+{% endblock %}
