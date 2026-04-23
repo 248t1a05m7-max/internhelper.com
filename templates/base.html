@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Attendance</title>
+  <title>Dhanekula College Attendance</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   <header class="topbar">
-    <h1>🎓 Smart Attendance Portal</h1>
+    <h1>🎓 Dhanekula College Attendance</h1>
     <nav>
       <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('admin') }}">Admin</a>
-      <a href="{{ url_for('student_page') }}">Student</a>
+      <a href="{{ url_for('admin_login') }}">Admin</a>
+      <a href="{{ url_for('student_login') }}">Student</a>
+      {% if session.get('role') %}<a href="{{ url_for('logout') }}">Logout</a>{% endif %}
     </nav>
   </header>
   <main class="container">
