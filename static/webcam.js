@@ -9,10 +9,13 @@ async function startCamera(videoId) {
   }
 }
 
-function captureFace(videoId, canvasId, outputInputId) {
+function captureFace(videoId, canvasId, outputInputId = null) {
   const video = document.getElementById(videoId);
   const canvas = document.getElementById(canvasId);
-  const output = document.getElementById(outputInputId);
+
+  if (!video || !canvas || !video.videoWidth) {
+    return null;
+  }
 
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
@@ -20,6 +23,9 @@ function captureFace(videoId, canvasId, outputInputId) {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-  output.value = dataUrl;
+  if (outputInputId) {
+    const output = document.getElementById(outputInputId);
+    if (output) output.value = dataUrl;
+  }
   return dataUrl;
 }

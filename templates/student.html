@@ -1,30 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 <section class="card">
-  <h2>Student Attendance</h2>
-  <p>Try face recognition first. If it fails, use your QR fallback.</p>
-
-  <label>Select Student
-    <select id="studentId">
-      <option value="">-- Select --</option>
-      {% for s in students %}
-      <option value="{{ s.id }}">{{ s.name }} ({{ s.id }})</option>
-      {% endfor %}
-    </select>
-  </label>
+  <h2>Welcome, {{ session.get('student_name') }}</h2>
+  <p>Mark your Time-In or Time-Out using face recognition.</p>
 
   <video id="studentVideo" autoplay playsinline class="video"></video>
   <canvas id="studentCanvas" class="hidden"></canvas>
-  <input type="hidden" id="studentFaceData" />
 
   <div class="actions">
-    <button class="btn" onclick="markFaceAttendance()">Mark via Face</button>
-    <button class="btn secondary" onclick="showQrHelp()">QR Fallback Help</button>
+    <button class="btn" onclick="markFaceAttendance('in')">Time-In</button>
+    <button class="btn secondary" onclick="markFaceAttendance('out')">Time-Out</button>
   </div>
 
   <p id="studentMsg"></p>
-  <div id="qrHelp" class="hidden tip">
-    Ask admin for your QR. Open/scan it to visit your unique QR check-in link.
+</section>
+
+<section class="card">
+  <h2>My Attendance Records</h2>
+  <div class="actions">
+    <a class="btn {{ 'secondary' if scope != 'daily' else '' }}" href="{{ url_for('student_dashboard', scope='daily') }}">Daily</a>
+    <a class="btn {{ 'secondary' if scope != 'weekly' else '' }}" href="{{ url_for('student_dashboard', scope='weekly') }}">Weekly</a>
+    <a class="btn {{ 'secondary' if scope != 'monthly' else '' }}" href="{{ url_for('student_dashboard', scope='monthly') }}">Monthly</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Mode</th><th>Action</th><th>Status</th><th>Note</th><th>Timestamp (UTC)</th></tr>
+      {% for a in logs %}
+      <tr>
+        <td>{{ a.mode }}</td><td>{{ a.action }}</td><td>{{ a.status }}</td><td>{{ a.note }}</td><td>{{ a.timestamp }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No records for selected window.</td></tr>
+      {% endfor %}
+    </table>
   </div>
 </section>
 
@@ -32,17 +41,11 @@
 <script>
   startCamera('studentVideo');
 
-  async function markFaceAttendance() {
-    const sid = document.getElementById('studentId').value;
+  async function markFaceAttendance(action) {
     const msg = document.getElementById('studentMsg');
-    if (!sid) {
-      msg.textContent = 'Please select your student ID first.';
-      return;
-    }
-
-    const faceData = captureFace('studentVideo', 'studentCanvas', 'studentFaceData');
+    const faceData = captureFace('studentVideo', 'studentCanvas', null);
     const formData = new URLSearchParams();
-    formData.append('student_id', sid);
+    formData.append('action', action);
     formData.append('face_data', faceData);
 
     const res = await fetch("{{ url_for('mark_face') }}", {
@@ -54,10 +57,6 @@
     const data = await res.json();
     msg.textContent = data.message;
     msg.className = data.ok ? 'ok' : 'err';
-  }
-
-  function showQrHelp() {
-    document.getElementById('qrHelp').classList.remove('hidden');
   }
 </script>
 {% endblock %}

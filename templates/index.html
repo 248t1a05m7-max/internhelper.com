@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <section class="card center">
-  <h2>Welcome 👋</h2>
-  <p>Use the admin page to register students and monitor attendance. Students can mark attendance via face recognition, with QR fallback if face match fails.</p>
-  <div class="actions">
-    <a class="btn" href="{{ url_for('admin') }}">Go to Admin</a>
-    <a class="btn secondary" href="{{ url_for('student_page') }}">Go to Student</a>
+  <h2>Face Recognition Attendance System</h2>
+  <p>Automated Time-In/Time-Out attendance with secure role-based access, reports, and export tools.</p>
+  <div class="actions center-actions">
+    <a class="btn" href="{{ url_for('admin_login') }}">Admin Login</a>
+    <a class="btn secondary" href="{{ url_for('student_login') }}">Student Login</a>
   </div>
+  <p class="muted">Default admin credentials: <code>admin / admin123</code> (change via environment variables).</p>
 </section>
 {% endblock %}

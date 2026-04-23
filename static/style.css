@@ -20,31 +20,40 @@ body {
   position: sticky; top: 0;
 }
 .topbar a { color: var(--muted); margin-left: 14px; text-decoration: none; }
-.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.container { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
 .grid.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .card {
   background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
   border: 1px solid #2c3f77; border-radius: 16px; padding: 18px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  margin-bottom: 16px;
 }
+.narrow { max-width: 500px; margin: 10px auto; }
 .center { text-align: center; }
+.center-actions { justify-content: center; }
 label { display: block; margin-bottom: 10px; }
 input, select {
   width: 100%; margin-top: 6px; padding: 10px; border-radius: 10px;
   border: 1px solid #344a86; background: #0f1730; color: #fff;
 }
-.actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
 .btn {
   border: none; border-radius: 10px; padding: 10px 14px; cursor: pointer;
   background: var(--accent); color: #00291a; font-weight: 700; text-decoration: none;
 }
 .btn.secondary { background: var(--accent2); color: #031c3a; }
+.danger-btn {
+  border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  background: var(--danger); color: #fff; font-weight: 700;
+}
 .video { width: 100%; max-height: 320px; border-radius: 12px; margin-top: 10px; border: 1px solid #2f467f; }
 .hidden { display: none; }
 .ok { color: var(--accent); }
 .err { color: var(--danger); }
-.tip { margin-top: 12px; padding: 10px; border-radius: 10px; background: #1b2649; color: #d6e3ff; }
+.muted { color: var(--muted); }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 8px; border-bottom: 1px solid #2f467f; text-align: left; }
+.inline-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+code { background: #1b2649; padding: 2px 5px; border-radius: 4px; }
 @media (max-width: 900px) { .grid.two { grid-template-columns: 1fr; } }
